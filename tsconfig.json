@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "es5",
+    "target": "es6",
     "lib": ["dom", "dom.iterable", "esnext"],
     "esModuleInterop": true,
     "module": "esnext",
@@ -12,13 +12,11 @@
       "@/*": ["*"]
     },
     "allowJs": true,
-    "skipLibCheck": false,
-    "allowSyntheticDefaultImports": true,
     // "strict": true,
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,
     "isolatedModules": false,
-    "noEmit": true,
+    
   },
   "include": ["src"]
 }
