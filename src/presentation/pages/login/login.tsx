@@ -1,8 +1,10 @@
-import React from 'react'
+import React from "react";
 
-import Styles from './login-styles.scss'
+import Styles from "./login-styles.scss";
 
-const Login: React.FC = () => { 
+import Spinner from "../../components/spinner/spinner";
+
+const Login: React.FC = () => {
   return (
     <div className={Styles.login}>
       <header className={Styles.header}>
@@ -15,19 +17,34 @@ const Login: React.FC = () => {
       <form className={Styles.form}>
         <h2>Login</h2>
 
-        <input type="email" name="email" placeholder="Digite seu e-mail" />
-        <input type="password" name="password" placeholder="Digite sua senha" />
+        <div className={Styles.inputWrap}>
+          <input type="email" name="email" placeholder="Digite seu e-mail" />
+          <span className={Styles.status}>🔴</span>
+        </div>
 
-        <button type="submit">Entrar</button>
+        <div className={Styles.inputWrap}>
+          <input
+            type="password"
+            name="password"
+            placeholder="Digite sua senha"
+          />
+          <span className={Styles.status}>🔴</span>
+        </div>
+
+        <button className={Styles.submit} type="submit">
+          Entrar
+        </button>
+
+        <span className={Styles.link}>Criar conta</span>
+
+        <div className={Styles.errorWrapper}>
+          <Spinner />
+          <span className={Styles.error}>Erro</span>
+        </div>
       </form>
       <footer className={Styles.footer}></footer>
     </div>
   );
 };
 
-
-export default Login
-
-
-
-
+export default Login;
