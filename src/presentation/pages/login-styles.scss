@@ -1,0 +1,84 @@
+$white : #fff;
+$black: #000;
+$background: #f2f2f2;
+$primary: #880E4F;
+$primaryDark: #560027;
+$primaryLight: #BC477b;
+
+* {
+  font-family: 'Roboto', sans-serif;
+  font-size: 14px;
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+
+body {
+  background-color: $background;
+}
+
+input[type="email"],
+input[type="password"] {
+  border: 1px solid $primaryLight;
+  line-height: 40px;
+  border-radius: 4px;
+
+   &:focus {
+    outline-color: $primaryLight;
+  }
+}
+
+button {
+  background-color: $primary;
+  height: 40px;
+  color: $white;
+  border-radius: 8px;
+  font-size: 16px;
+  border: none;
+
+  &:hover {
+    opacity: 0.9;
+  }
+}
+
+ 
+.login {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  justify-content:space-between;
+
+  .header {
+    background-color: $primary;
+    display: flex;
+    flex-direction: column;
+    border-top:  40px solid $primaryDark;
+    align-items: center;
+
+    img {
+      margin-top: 40px;
+    }
+
+    h1 {
+      color: $white;
+      margin: 16px 0px 40px;
+
+    }
+  }
+
+  .form {
+    display: flex;
+    flex-direction: column;
+    width: 400px;
+
+    background: $white;
+    padding: 40px;
+    border-radius: 10px;
+  }
+
+  .footer{
+    height: 48px;
+    background-color: $primary;
+  }
+}
