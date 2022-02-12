@@ -9,7 +9,8 @@ import {
 
 import Login from "./login";
 
-import {ValidationSpy} from "@/presentation/test";
+import faker from 'faker';
+import { ValidationSpy } from "@/presentation/test";
 
 
 type SutTypes = {
@@ -52,17 +53,18 @@ describe("Login Component", () => {
 
   test("Should call validation with correct email value", () => {
     const { sut, validationSpy } = makeSut();
-
+    
     const emailInput = sut.getByTestId("email");
+    const email = faker.internet.email();
 
     fireEvent.input(emailInput, {
       target: {
-        value: "any_email",
+        value: email,
       },
     });
 
     expect(validationSpy.fieldName).toBe('email')
-    expect(validationSpy.fieldValue).toBe("any_email");
+    expect(validationSpy.fieldValue).toBe(email);
     
   });
 
@@ -70,15 +72,16 @@ describe("Login Component", () => {
     const { sut, validationSpy } = makeSut();
 
     const passwordInput = sut.getByTestId("password");
+    const password = faker.internet.password();
 
     fireEvent.input(passwordInput, {
       target: {
-        value: "any_password",
+        value: password,
       },
     });
 
     expect(validationSpy.fieldName).toBe("password");
-    expect(validationSpy.fieldValue).toBe("any_password");
+    expect(validationSpy.fieldValue).toBe(password);
     
   });
 });
