@@ -17,11 +17,19 @@ const Input: React.FC<Props> = (props: Props) => {
   };
 
   const getStatus = (): string => {
-    return "🔴";
+    if (error) {
+      return "🔴";  
+    }
+    return "🟢"    
   };
 
   const getTitle = (): string => {
-    return error;
+    if (error) {
+      return error;  
+    }
+
+    return "Tudo certo!"
+    
   };
 
   function handleChange(event: React.FocusEvent<HTMLInputElement>): void {
