@@ -128,7 +128,6 @@ describe("Login Component", () => {
   test("Should show able button if the form fields are correctly", () => {
     const { sut } = makeSut();
     
-
     const emailInput = sut.getByTestId("email");
     fireEvent.input(emailInput, {
       target: {
@@ -145,7 +144,31 @@ describe("Login Component", () => {
 
     const submitButton = sut.getByTestId("submit") as HTMLButtonElement;
     expect(submitButton.disabled).toBeFalsy();
-
-   
   });
+
+  test("Should show spinner on submit", () => {
+    const { sut } = makeSut();
+
+    const emailInput = sut.getByTestId("email");
+    fireEvent.input(emailInput, {
+      target: {
+        value: faker.internet.email(),
+      },
+    });
+
+    const passwordInput = sut.getByTestId("password");
+    fireEvent.input(passwordInput, {
+      target: {
+        value: faker.internet.password(),
+      },
+    });
+
+    const submitButton = sut.getByTestId("submit");
+    fireEvent.click(submitButton)
+
+    const spinner = sut.getByTestId('spinner');
+    expect(spinner).toBeTruthy();
+  });
+
+
 });
