@@ -38,7 +38,9 @@ const Login: React.FC<Props> = ({ validation, authentication }: Props) => {
   }, [state.email, state.password]);
 
 
-  async function handleSubmit(event: React.FormEvent<HTMLFormElement> ): Promise<void> {
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>): Promise<void> {
+    if (state.isLoading) return;
+    
     event.preventDefault();
 
     setState({
