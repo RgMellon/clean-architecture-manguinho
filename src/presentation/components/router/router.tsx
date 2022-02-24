@@ -1,14 +1,14 @@
 import { Login } from "@/presentation/pages";
 import React from "react";
 
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Route, Switch } from "react-router-dom";
 
 const Router: React.FC = () => {
   return (
     <BrowserRouter>
-      <Routes>
+      <Switch>
         {/* <Route path="/login" element={<Login />} /> */}
-      </Routes>
+      </Switch>
     </BrowserRouter>
   );
 };
