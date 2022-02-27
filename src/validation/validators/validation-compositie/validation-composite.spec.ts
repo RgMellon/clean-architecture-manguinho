@@ -2,19 +2,29 @@ import { FieldValidation } from "@/validation/protocols/field-validation";
 import { FieldValidationSpy } from "../test/mock-field-validation";
 import { ValidationComposite } from "./validation-composite";
 
+type SutTypes = {
+  sut: ValidationComposite,
+  fieldValidationsSpy: FieldValidationSpy[]
+}
+
+const makeSut = (): SutTypes => {
+  const fieldValidationsSpy = [new FieldValidationSpy("any_field"), new FieldValidationSpy("any_field")];
+
+  const sut = new ValidationComposite(fieldValidationsSpy);
+
+  return {
+    sut,
+    fieldValidationsSpy,
+  };
+}
+
 describe('ValidationComposite', () => {
   test('Should return error if any validation fails', () => {
-    const fieldValidationSpy1 = new FieldValidationSpy("any_field");
-    const fieldValidationSpy2 = new FieldValidationSpy("any_field");
-
-    fieldValidationSpy1.error = new Error("first_error");
-    fieldValidationSpy2.error = new Error("second_error");
+    const { sut, fieldValidationsSpy } = makeSut();
     
-    const sut = new ValidationComposite([
-      fieldValidationSpy1,
-      fieldValidationSpy2,
-    ]);
-
+    fieldValidationsSpy[0].error = new Error("first_error");
+    fieldValidationsSpy[1].error = new Error("second_error");
+    
     const error = sut.validate('any_field', 'any_value')
     expect(error).toBe("first_error");
   })
