@@ -10,7 +10,7 @@ const makeSut = (minValidation: number): MinLengthValidation =>
 describe('MinLengthValidation', () => {
   it('should return error if value is invalid', () => {
     const sut = makeSut(3)
-    const error = sut.validate('123')
+    const error = sut.validate('')
 
     expect(error).toEqual(new InvalidFieldError());
   })
