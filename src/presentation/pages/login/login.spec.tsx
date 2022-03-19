@@ -15,7 +15,7 @@ import {
 
 import 'jest-localstorage-mock'
 
-import Login from "./login";
+import { Login } from "@/presentation/pages";
 
 import { AuthenticationSpy, ValidationStub } from "@/presentation/test";
 import { InvalidCredentialsError } from "@/domain/errors";
