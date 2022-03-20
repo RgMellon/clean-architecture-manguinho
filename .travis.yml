@@ -1,6 +1,13 @@
 language: node_js
 node_js:
   - 12
-script: 
-  - npx eslint 'src/**'
-  - yarn test:ci
+addons:
+  packages:
+    - libgconf-2-4
+cache:
+  npm: true
+  directories:
+    - ~/.cache
+script:
+  - npx eslint "src/**"
+  - npm run test:ci
