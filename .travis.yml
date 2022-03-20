@@ -9,5 +9,5 @@ cache:
   directories:
     - ~/.cache
 script:
-  - npx eslint "src/**"
-  - npm run test:ci
+  - npm run lint
+
