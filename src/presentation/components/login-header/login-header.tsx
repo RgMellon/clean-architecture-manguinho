@@ -1,8 +1,8 @@
-import React from "react";
+import React from 'react'
 
-import Logo from "../logo";
+import Logo from '../logo'
 
-import Styles from "./login-header-style.scss";
+import Styles from './login-header-style.scss'
 
 const LoginHeader: React.FC = () => {
   return (
@@ -10,7 +10,7 @@ const LoginHeader: React.FC = () => {
       <Logo />
       <h1>4Dev - Enquetes para programadores</h1>
     </header>
-  );
-};
+  )
+}
 
-export default LoginHeader;
+export default LoginHeader

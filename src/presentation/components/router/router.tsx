@@ -1,6 +1,6 @@
-import React from "react";
+import React from 'react'
 
-import { BrowserRouter, Route, Switch } from "react-router-dom";
+import { BrowserRouter, Route, Switch } from 'react-router-dom'
 
 type Props = {
   makeLogin: React.FC
@@ -13,7 +13,7 @@ const Router: React.FC<Props> = ({ makeLogin }: Props) => {
         <Route path="/login" exact component={makeLogin} />
       </Switch>
     </BrowserRouter>
-  );
-};
+  )
+}
 
-export default Router;
+export default Router

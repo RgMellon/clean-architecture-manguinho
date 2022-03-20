@@ -1,70 +1,67 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react'
 
-import Styles from "./login-styles.scss";
+import Styles from './login-styles.scss'
 
 import {
   LoginHeader,
   FormStatus,
   Footer,
-  Input,
-} from "@/presentation/components";
+  Input
+} from '@/presentation/components'
 
-import Context from "@/presentation/contexts/form/form-context";
+import Context from '@/presentation/contexts/form/form-context'
 
-import { Validation } from "@/presentation/protocols/validation";
-import { Authentication } from "@/domain/usecases";
-import { Link, useHistory } from "react-router-dom";
+import { Validation } from '@/presentation/protocols/validation'
+import { Authentication } from '@/domain/usecases'
+import { Link, useHistory } from 'react-router-dom'
 
 type Props = {
-  validation: Validation;
-  authentication: Authentication;
+  validation: Validation
+  authentication: Authentication
 };
 
 const Login: React.FC<Props> = ({ validation, authentication }: Props) => {
-  const history = useHistory();
+  const history = useHistory()
 
   const [state, setState] = useState({
     isLoading: false,
-    emailError: "",
-    passwordError: "",
-    mainError: "",
-    email: "",
-    password: "",
-  });
+    emailError: '',
+    passwordError: '',
+    mainError: '',
+    email: '',
+    password: ''
+  })
 
   useEffect(() => {
     setState({
       ...state,
-      emailError: validation.validate("email", state.email),
-      passwordError: validation.validate("password", state.password),
-    });
-  }, [state.email, state.password]);
+      emailError: validation.validate('email', state.email),
+      passwordError: validation.validate('password', state.password)
+    })
+  }, [state.email, state.password])
 
-
-  async function handleSubmit(event: React.FormEvent<HTMLFormElement>): Promise<void> {
+  async function handleSubmit (event: React.FormEvent<HTMLFormElement>): Promise<void> {
     try {
-      if (state.isLoading || state.emailError || state.passwordError) return;
+      if (state.isLoading || state.emailError || state.passwordError) return
 
-      event.preventDefault();
+      event.preventDefault()
 
       setState({
         ...state,
-        isLoading: true,
-      });
+        isLoading: true
+      })
 
       const account = await authentication.auth({ email: state.email, password: state.password })
-      
-      localStorage.setItem("accessToken", account.access_token);
+      localStorage.setItem('accessToken', account.access_token)
 
       history.replace('/')
     } catch (err) {
       setState({
         ...state,
         isLoading: false,
-        mainError: err.message,
-      });
+        mainError: err.message
+      })
     }
-
   }
 
   return (
@@ -105,7 +102,7 @@ const Login: React.FC<Props> = ({ validation, authentication }: Props) => {
       </Context.Provider>
       <Footer />
     </div>
-  );
-};
+  )
+}
 
-export default Login;
+export default Login

@@ -1,18 +1,19 @@
-import React from "react";
+import React from 'react'
 
-import Styles from "./spinner-style.scss";
+import Styles from './spinner-style.scss'
 
 type Props = React.HTMLAttributes<HTMLElement>;
 
-const Spinner: React.FC = (props: Props) => {
+const Spinner: React.FC<Props> = (props: Props) => {
   return (
-    <div {...props} data-testid="spinner" className={[Styles.spinner, props.className].join(" ")}>
+    // eslint-disable-next-line react/prop-types
+    <div {...props} data-testid="spinner" className={[Styles.spinner, props.className].join(' ')}>
       <div></div>
       <div></div>
       <div></div>
       <div></div>
     </div>
-  );
-};
+  )
+}
 
-export default Spinner;
+export default Spinner

@@ -1,54 +1,56 @@
-import React, { useContext } from "react";
+import React, { useContext } from 'react'
 
-import Context from "@/presentation/contexts/form/form-context";
-import Styles from "./input-style.scss";
+import Context from '@/presentation/contexts/form/form-context'
+import Styles from './input-style.scss'
 
 type Props = React.DetailedHTMLProps<
-  React.InputHTMLAttributes<HTMLInputElement>,
-  HTMLInputElement
+React.InputHTMLAttributes<HTMLInputElement>,
+HTMLInputElement
 >;
 
 const Input: React.FC<Props> = (props: Props) => {
-  const { state, setState } = useContext(Context);
-  const error = state[`${props.name}Error`];
+  const { state, setState } = useContext(Context)
+  // eslint-disable-next-line react/prop-types
+  const error = state[props.name + 'Error']
 
   const enableInput = (event: React.FocusEvent<HTMLInputElement>): void => {
-    event.target.readOnly = false;
-  };
+    event.target.readOnly = false
+  }
 
   const getStatus = (): string => {
     if (error) {
-      return "🔴";  
+      return '🔴'
     }
-    return "🟢"    
-  };
+    return '🟢'
+  }
 
   const getTitle = (): string => {
     if (error) {
-      return error;  
+      return error
     }
 
-    return "Tudo certo!"
-    
-  };
+    return 'Tudo certo!'
+  }
 
-  function handleChange(event: React.FocusEvent<HTMLInputElement>): void {
+  function handleChange (event: React.FocusEvent<HTMLInputElement>): void {
     setState({
       ...state,
-      [event.target.name]: event.target.value,
-    });
+      [event.target.name]: event.target.value
+    })
   }
 
   return (
     <div className={Styles.inputWrap}>
       <input
         {...props}
+        // eslint-disable-next-line react/prop-types
         data-testid={props.name}
         readOnly
         onFocus={enableInput}
         onChange={handleChange}
       />
       <span
+        // eslint-disable-next-line react/prop-types
         data-testid={`${props.name}-status`}
         title={getTitle()}
         className={Styles.status}
@@ -56,7 +58,7 @@ const Input: React.FC<Props> = (props: Props) => {
         {getStatus()}
       </span>
     </div>
-  );
-};
+  )
+}
 
-export default Input;
+export default Input
