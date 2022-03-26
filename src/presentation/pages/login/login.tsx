@@ -53,7 +53,8 @@ const Login: React.FC<Props> = ({ validation, authentication, saveAccessToken }:
       })
 
       const account = await authentication.auth({ email: state.email, password: state.password })
-      await saveAccessToken.save(account.access_token)
+
+      await saveAccessToken.save(account.accessToken)
 
       history.replace('/')
     } catch (err) {
