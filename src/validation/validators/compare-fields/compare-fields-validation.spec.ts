@@ -12,4 +12,12 @@ describe('CompareFieldsValidation', () => {
     const error = sut.validate(faker.random.word())
     expect(error).toEqual(new InvalidFieldError())
   })
+
+  test('Should return falsy if field is note empty', () => {
+    const valueToCompare = faker.random.word()
+
+    const sut = makeSut(valueToCompare)
+    const error = sut.validate(valueToCompare)
+    expect(error).toBeFalsy()
+  })
 })
