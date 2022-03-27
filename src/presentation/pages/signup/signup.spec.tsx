@@ -12,9 +12,11 @@ import {
   RenderResult,
   waitFor
 } from '@testing-library/react'
+import { AddAccountSpy } from '@/presentation/test/mock-add-account'
 
 type SutTypes = {
   sut: RenderResult
+  addAccountSpy: AddAccountSpy
 };
 
 type SutParams = {
@@ -24,18 +26,19 @@ type SutParams = {
 const makeSut = (params?: SutParams): SutTypes => {
   const validationStub = new ValidationStub()
   validationStub.errorMessage = params?.validationError
-  // const validationStub = new ValidationStub()
+
+  const addAccountSpy = new AddAccountSpy()
 
   const sut = render(
-
     <SignUp
       validation={validationStub}
+      addAccount={addAccountSpy}
     />
-
   )
 
   return {
-    sut
+    sut,
+    addAccountSpy
   }
 }
 
@@ -43,6 +46,7 @@ const simulateValidatedSubmit = async (sut: RenderResult, name = faker.name.find
   Helper.populateField(sut, 'email', email)
   Helper.populateField(sut, 'password', password)
   Helper.populateField(sut, 'name', name)
+  Helper.populateField(sut, 'passwordConfirmation', password)
 
   const form = sut.getByTestId('form')
   fireEvent.submit(form)
@@ -143,5 +147,22 @@ describe('SignUp Component', () => {
     await simulateValidatedSubmit(sut)
 
     Helper.testIfElementExists(sut, 'spinner')
+  })
+
+  test('Should call AddAccount with correct values', async () => {
+    const { sut, addAccountSpy } = makeSut()
+
+    const name = faker.name.findName()
+    const email = faker.internet.email()
+    const password = faker.internet.password()
+
+    await simulateValidatedSubmit(sut, name, email, password)
+
+    expect(addAccountSpy.params).toEqual({
+      email,
+      name,
+      passwordConfirmation: password,
+      password
+    })
   })
 })
