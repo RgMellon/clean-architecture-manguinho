@@ -24,13 +24,17 @@ const SignUp: React.FC<Props> = ({ validation }) => {
   const [state, setState] = useState({
     isLoading: false,
     name: '',
-    email: '',
-    password: '',
-    passwordConfirmation: '',
-    emailError: '',
-    passwordError: '',
-    passwordConfirmationError: 'Campo obrigatório',
     nameError: '',
+
+    email: '',
+    emailError: '',
+
+    password: '',
+    passwordError: '',
+
+    passwordConfirmation: '',
+    passwordConfirmationError: '',
+
     mainError: ''
   })
 
@@ -39,7 +43,8 @@ const SignUp: React.FC<Props> = ({ validation }) => {
       ...state,
       nameError: validation.validate('name', state.name),
       emailError: validation.validate('email', state.email),
-      passwordError: validation.validate('password', state.password)
+      passwordError: validation.validate('password', state.password),
+      passwordConfirmationError: validation.validate('passwordConfirmationError', state.passwordConfirmationError)
     })
   }, [state.name, state.email])
 
