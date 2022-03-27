@@ -13,12 +13,14 @@ import Context from '@/presentation/contexts/form/form-context'
 
 import { Link } from 'react-router-dom'
 import { Validation } from '@/presentation/protocols/validation'
+import { AddAccount } from '@/domain/usecases'
 
 type Props = {
   validation: Validation
+  addAccount: AddAccount
 };
 
-const SignUp: React.FC<Props> = ({ validation }) => {
+const SignUp: React.FC<Props> = ({ validation, addAccount }) => {
   // const history = useHistory()
 
   const [state, setState] = useState({
@@ -53,9 +55,16 @@ const SignUp: React.FC<Props> = ({ validation }) => {
 
     event.preventDefault()
 
-    await setState({
+    setState({
       ...state,
       isLoading: true
+    })
+
+    await addAccount.add({
+      name: state.name,
+      email: state.email,
+      password: state.password,
+      passwordConfirmation: state.passwordConfirmation
     })
   }
 
