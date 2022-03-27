@@ -37,3 +37,8 @@ export const populateField = (sut: RenderResult, fieldName: string, value = fake
     }
   })
 }
+
+export const testIfElementExists = (sut: RenderResult, fieldName: string): void => {
+  const el = sut.getByTestId(fieldName)
+  expect(el).toBeTruthy()
+}

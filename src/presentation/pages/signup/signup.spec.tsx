@@ -39,6 +39,16 @@ const makeSut = (params?: SutParams): SutTypes => {
   }
 }
 
+const simulateValidatedSubmit = async (sut: RenderResult, name = faker.name.findName(), email = faker.internet.email(), password = faker.internet.password()): Promise<void> => {
+  Helper.populateField(sut, 'email', email)
+  Helper.populateField(sut, 'password', password)
+  Helper.populateField(sut, 'name', name)
+
+  const form = sut.getByTestId('form')
+  fireEvent.submit(form)
+  await waitFor(() => form)
+}
+
 describe('SignUp Component', () => {
   afterEach(cleanup)
 
@@ -126,5 +136,12 @@ describe('SignUp Component', () => {
     Helper.populateField(sut, 'passwordConfirmation')
 
     Helper.testButtonIsDisabled(sut, 'submit', false)
+  })
+
+  test('Should show spinner on submit', async () => {
+    const { sut } = makeSut()
+    await simulateValidatedSubmit(sut)
+
+    Helper.testIfElementExists(sut, 'spinner')
   })
 })
