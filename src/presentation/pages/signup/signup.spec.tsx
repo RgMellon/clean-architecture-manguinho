@@ -21,15 +21,6 @@ type SutParams = {
   validationError?: string
 };
 
-const populateField = (sut: RenderResult, fieldName: string, value = faker.random.word()): void => {
-  const input = sut.getByTestId(fieldName)
-  fireEvent.input(input, {
-    target: {
-      value
-    }
-  })
-}
-
 const makeSut = (params?: SutParams): SutTypes => {
   const validationStub = new ValidationStub()
   validationStub.errorMessage = params?.validationError
@@ -60,7 +51,7 @@ describe('SignUp Component', () => {
     Helper.testButtonIsDisabled(sut, 'submit', true)
 
     Helper.testStatusForField(sut, 'name', validationError)
-    Helper.testStatusForField(sut, 'email', 'Campo obrigatório')
+    Helper.testStatusForField(sut, 'email', validationError)
 
     Helper.testStatusForField(sut, 'password', 'Campo obrigatório')
     Helper.testStatusForField(sut, 'passwordConfirmation', 'Campo obrigatório')
@@ -70,7 +61,15 @@ describe('SignUp Component', () => {
     const validationError = faker.random.words()
     const { sut } = makeSut({ validationError })
 
-    populateField(sut, 'name')
+    Helper.populateField(sut, 'name')
     Helper.testStatusForField(sut, 'name', validationError)
+  })
+
+  test('Should show email error if Validation fails', () => {
+    const validationError = faker.random.words()
+    const { sut } = makeSut({ validationError })
+
+    Helper.populateField(sut, 'email')
+    Helper.testStatusForField(sut, 'email', validationError)
   })
 })
