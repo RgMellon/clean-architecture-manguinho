@@ -1,8 +1,11 @@
 import React from 'react'
 
+import { Router } from 'react-router-dom'
+import { createMemoryHistory } from 'history'
+
 import faker from 'faker'
 
-import { Helper, ValidationStub } from '@/presentation/test'
+import { Helper, SaveAccessTokenMock, ValidationStub } from '@/presentation/test'
 import { SignUp } from '..'
 
 import {
@@ -18,28 +21,38 @@ import { EmailInUsError } from '@/domain/errors'
 type SutTypes = {
   sut: RenderResult
   addAccountSpy: AddAccountSpy
+  saveAccessTokenMock: SaveAccessTokenMock
 };
 
 type SutParams = {
   validationError?: string
 };
 
+const history = createMemoryHistory({
+  initialEntries: ['/signup']
+})
+
 const makeSut = (params?: SutParams): SutTypes => {
   const validationStub = new ValidationStub()
   validationStub.errorMessage = params?.validationError
 
+  const saveAccessTokenMock = new SaveAccessTokenMock()
   const addAccountSpy = new AddAccountSpy()
 
   const sut = render(
-    <SignUp
-      validation={validationStub}
-      addAccount={addAccountSpy}
-    />
+    <Router history={history}>
+      <SignUp
+        validation={validationStub}
+        addAccount={addAccountSpy}
+        saveAccessToken={saveAccessTokenMock}
+      />
+    </Router>
   )
 
   return {
     sut,
-    addAccountSpy
+    addAccountSpy,
+    saveAccessTokenMock
   }
 }
 
@@ -193,5 +206,14 @@ describe('SignUp Component', () => {
 
     Helper.testElementText(sut, 'main-error', error.message)
     Helper.testChildCount(sut, 'error-wrap', 1)
+  })
+
+  test('Should call SaveAccessToken  on success', async () => {
+    const { sut, addAccountSpy, saveAccessTokenMock } = makeSut()
+    await simulateValidatedSubmit(sut)
+
+    expect(saveAccessTokenMock.accessToken).toBe(addAccountSpy.account.accessToken)
+    expect(history.length).toBe(1)
+    expect(history.location.pathname).toBe('/')
   })
 })
