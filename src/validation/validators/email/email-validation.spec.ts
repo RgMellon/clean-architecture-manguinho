@@ -3,26 +3,30 @@ import faker from 'faker'
 import { InvalidFieldError } from '@/validation/errors/invalid-field-error'
 import { EmailValidation } from './email-validation'
 
-const makeSut = (): EmailValidation => new EmailValidation(faker.database.column())
+const makeSut = (field: string): EmailValidation => new EmailValidation(field)
 
 describe('EmailValidation', () => {
   test('should return error if email is invalid', () => {
-    const sut = makeSut()
-    const error = sut.validate(faker.random.word())
+    const field = faker.random.word()
+
+    const sut = makeSut(field)
+    const error = sut.validate({ [field]: faker.random.word() })
 
     expect(error).toEqual(new InvalidFieldError())
   })
 
   test('should return falsy if emails is valid', () => {
-    const sut = makeSut()
-    const error = sut.validate(faker.internet.email())
+    const field = faker.random.word()
+    const sut = makeSut(field)
+    const error = sut.validate({ [field]: faker.internet.email() })
 
     expect(error).toBeFalsy()
   })
 
   test('should return falsy if emails is empty', () => {
-    const sut = makeSut()
-    const error = sut.validate('')
+    const field = faker.random.word()
+    const sut = makeSut(field)
+    const error = sut.validate({ [field]: '' })
 
     expect(error).toBeFalsy()
   })
