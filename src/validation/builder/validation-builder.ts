@@ -33,6 +33,8 @@ export class ValidationBuilder {
   }
 
   sameAs (fieldToCompare: string): ValidationBuilder {
+    // console.log(fieldToCompare, this.fieldName)
+    console.log(fieldToCompare)
     this.validations.push(new CompareFieldsValidation(this.fieldName, fieldToCompare))
     return this
   }

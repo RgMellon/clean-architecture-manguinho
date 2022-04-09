@@ -5,6 +5,7 @@ export class ValidationComposite implements Validation {
   constructor (private readonly validators: FieldValidation[]) {}
 
   validate (fieldName: string, input: object): string {
+    console.log(fieldName, input, this.validators)
     const validators = this.validators.filter(
       (validator) => validator.field === fieldName
     )

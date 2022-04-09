@@ -28,19 +28,14 @@ const SignUp: React.FC<Props> = ({ validation, addAccount, saveAccessToken }) =>
   const [state, setState] = useState({
     isLoading: false,
     isFormInvalid: true,
-
     name: '',
-    nameError: '',
-
     email: '',
-    emailError: '',
-
     password: '',
-    passwordError: '',
-
     passwordConfirmation: '',
+    nameError: '',
+    emailError: '',
+    passwordError: '',
     passwordConfirmationError: '',
-
     mainError: ''
   })
 
@@ -51,7 +46,7 @@ const SignUp: React.FC<Props> = ({ validation, addAccount, saveAccessToken }) =>
     const nameError = validation.validate('name', formData)
     const emailError = validation.validate('email', formData)
     const passwordError = validation.validate('password', formData)
-    const passwordConfirmationError = validation.validate('passwordConfirmationError', formData)
+    const passwordConfirmationError = validation.validate('passwordConfirmation', formData)
 
     setState({
       ...state,
@@ -59,10 +54,9 @@ const SignUp: React.FC<Props> = ({ validation, addAccount, saveAccessToken }) =>
       emailError,
       passwordError,
       passwordConfirmationError,
-
       isFormInvalid: !!nameError || !!emailError || !!passwordError || !!passwordConfirmationError
     })
-  }, [state.name, state.email])
+  }, [state.name, state.email, state.password, state.passwordConfirmation])
 
   async function handleSubmit (event: React.FormEvent<HTMLFormElement>): Promise<void> {
     try {
@@ -110,13 +104,14 @@ const SignUp: React.FC<Props> = ({ validation, addAccount, saveAccessToken }) =>
 
           <Input
             type="password"
-            name="passwordConfirmation"
-            placeholder="Repita sua  senha"
+            name="password"
+            placeholder="Digite sua senha"
           />
+
           <Input
             type="password"
-            name="password"
-            placeholder="Digita sua senha"
+            name="passwordConfirmation"
+            placeholder="Repita sua  senha"
           />
 
           <SubmitButton text='Entrar' />

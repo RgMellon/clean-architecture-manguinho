@@ -42,6 +42,7 @@ const Login: React.FC<Props> = ({ validation, authentication, saveAccessToken }:
 
     const emailError = validation.validate('email', formData)
     const passwordError = validation.validate('password', formData)
+
     setState({
       ...state,
       emailError,
