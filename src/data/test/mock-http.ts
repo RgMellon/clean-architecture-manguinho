@@ -6,6 +6,7 @@ import {
 } from '@/data/protocols/http'
 
 import faker from 'faker'
+import { HttpGetClient, HttpGetParams } from '../protocols/http/http-get-client'
 
 export const mockPostRequest = (): HttpPostParams => ({
   url: faker.internet.url(),
@@ -24,5 +25,13 @@ export class HttpPostClientSpy<R> implements HttpPostClient<R> {
     this.body = params.body
 
     return Promise.resolve(this.response)
+  }
+}
+
+export class HttpGetClientSpy implements HttpGetClient {
+  url: string;
+  // eslint-disable-next-line @typescript-eslint/require-await
+  async get (params: HttpGetParams): Promise<void> {
+    this.url = params.url
   }
 }
