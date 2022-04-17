@@ -10,8 +10,8 @@ export const mockAxios = (): jest.Mocked<typeof axios> => {
   const mockedAxios = axios as jest.Mocked<typeof axios>
   const mockedAxiosResult = mocktHttpResponse()
 
-  mockedAxios.post.mockResolvedValue(mockedAxiosResult)
-  mockedAxios.get.mockResolvedValue(mockedAxiosResult)
+  mockedAxios.post.mockClear().mockResolvedValue(mockedAxiosResult)
+  mockedAxios.get.mockClear().mockResolvedValue(mockedAxiosResult)
 
   return mockedAxios
 }

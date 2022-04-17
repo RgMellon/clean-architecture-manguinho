@@ -1,9 +1,9 @@
 
 import { HttpPostParams, HttpResponse, HttpPostClient } from '@/data/protocols/http'
-import { HttpGetParams } from '@/data/protocols/http/http-get-client'
+import { HttpGetClient, HttpGetParams } from '@/data/protocols/http/http-get-client'
 import axios, { AxiosResponse } from 'axios'
 
-export class AxiosHttpClient implements HttpPostClient {
+export class AxiosHttpClient implements HttpPostClient, HttpGetClient {
   async post (params: HttpPostParams): Promise<HttpResponse> {
     let axiosResponse: AxiosResponse
 
@@ -19,7 +19,12 @@ export class AxiosHttpClient implements HttpPostClient {
     }
   }
 
-  async get (params: HttpGetParams): Promise<void> {
-    await axios.get(params.url)
+  async get (params: HttpGetParams): Promise<HttpResponse> {
+    const axiosResponse = await axios.get(params.url)
+
+    return {
+      statusCode: axiosResponse.status,
+      body: axiosResponse.data
+    }
   }
 }
