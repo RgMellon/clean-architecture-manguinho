@@ -32,14 +32,19 @@ describe('AxiosHttpClient', () => {
       expect(mockedAxios.post).toHaveBeenCalledWith(request.url, request.body)
     })
 
-    it('Should return axios.post corret response on axios.post', () => {
-      const { sut, mockedAxios } = makeSut()
-      const promise = sut.post(mockPostRequest())
-
+    it('Should return corret response on axios.post', async () => {
       /* mockedAxios.post.mock.results[0] pega o resultado do resolvedValue,
     pois poderia ser o reject ja que usamos o mockResolvedValue */
 
-      expect(promise).toEqual(mockedAxios.post.mock.results[0].value)
+      const { sut, mockedAxios } = makeSut()
+
+      const httpResponse = await sut.post(mockPostRequest())
+      const axiosResponse = await mockedAxios.post.mock.results[0].value
+
+      expect(httpResponse).toEqual({
+        statusCode: axiosResponse.status,
+        body: axiosResponse.data
+      })
     })
 
     it('Should return correct error on axios.post', () => {
