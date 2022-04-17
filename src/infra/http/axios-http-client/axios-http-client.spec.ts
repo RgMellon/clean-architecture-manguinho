@@ -22,32 +22,34 @@ const makeSut = (): SutTypes => {
 }
 
 describe('AxiosHttpClient', () => {
-  it('Should call axios wiht corret values', async () => {
-    const request = mockPostRequest()
+  describe('post', () => {
+    it('Should call axios.post wiht corret values', async () => {
+      const request = mockPostRequest()
 
-    const { sut, mockedAxios } = makeSut()
-    await sut.post(request)
+      const { sut, mockedAxios } = makeSut()
+      await sut.post(request)
 
-    expect(mockedAxios.post).toHaveBeenCalledWith(request.url, request.body)
-  })
-
-  it('Should return axios the corret status code and body', () => {
-    const { sut, mockedAxios } = makeSut()
-    const promise = sut.post(mockPostRequest())
-
-    /* mockedAxios.post.mock.results[0] pega o resultado do resolvedValue,
-    pois poderia ser o reject ja que usamos o mockResolvedValue */
-
-    expect(promise).toEqual(mockedAxios.post.mock.results[0].value)
-  })
-
-  it('Should return axios the corret status code and body on failure', () => {
-    const { sut, mockedAxios } = makeSut()
-    mockedAxios.post.mockRejectedValueOnce({
-      response: mocktHttpResponse()
+      expect(mockedAxios.post).toHaveBeenCalledWith(request.url, request.body)
     })
 
-    const promise = sut.post(mockPostRequest())
-    expect(promise).toEqual(mockedAxios.post.mock.results[0].value)
+    it('Should return axios.post corret response on axios.post', () => {
+      const { sut, mockedAxios } = makeSut()
+      const promise = sut.post(mockPostRequest())
+
+      /* mockedAxios.post.mock.results[0] pega o resultado do resolvedValue,
+    pois poderia ser o reject ja que usamos o mockResolvedValue */
+
+      expect(promise).toEqual(mockedAxios.post.mock.results[0].value)
+    })
+
+    it('Should return correct error on axios.post', () => {
+      const { sut, mockedAxios } = makeSut()
+      mockedAxios.post.mockRejectedValueOnce({
+        response: mocktHttpResponse()
+      })
+
+      const promise = sut.post(mockPostRequest())
+      expect(promise).toEqual(mockedAxios.post.mock.results[0].value)
+    })
   })
 })
