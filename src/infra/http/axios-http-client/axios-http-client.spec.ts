@@ -1,6 +1,6 @@
 import { AxiosHttpClient } from './axios-http-client'
 import { mockAxios, mocktHttpResponse } from '@/infra/test'
-import { mockPostRequest } from '@/data/test/mock-http'
+import { mockPostRequest, mockGetRequest } from '@/data/test/mock-http'
 
 import axios from 'axios'
 
@@ -50,6 +50,17 @@ describe('AxiosHttpClient', () => {
 
       const promise = sut.post(mockPostRequest())
       expect(promise).toEqual(mockedAxios.post.mock.results[0].value)
+    })
+  })
+
+  describe('get', () => {
+    it('Should call axios.get wiht corret values', async () => {
+      const request = mockGetRequest()
+
+      const { sut, mockedAxios } = makeSut()
+      await sut.get(request)
+
+      expect(mockedAxios.get).toHaveBeenCalledWith(request.url)
     })
   })
 })
