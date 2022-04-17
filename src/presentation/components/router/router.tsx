@@ -1,3 +1,4 @@
+import SurveyList from '@/presentation/pages/survey-list/survey-list'
 import React from 'react'
 
 import { BrowserRouter, Route, Switch } from 'react-router-dom'
@@ -13,6 +14,7 @@ const Router: React.FC<Props> = ({ makeLogin, makeSignUp }: Props) => {
       <Switch>
         <Route path="/login" exact component={makeLogin} />
         <Route path="/signup" exact component={makeSignUp} />
+        <Route path="/" exact component={SurveyList} />
       </Switch>
     </BrowserRouter>
   )
