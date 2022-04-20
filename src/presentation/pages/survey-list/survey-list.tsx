@@ -25,6 +25,8 @@ const SurveyList: React.FC = () => {
             </div>
             <footer> Ver resultado </footer>
           </li>
+
+          <li></li>
         </ul>
       </div>
       <Footer />
