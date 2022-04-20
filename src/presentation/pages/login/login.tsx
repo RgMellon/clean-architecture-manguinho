@@ -12,17 +12,17 @@ import {
 import Context from '@/presentation/contexts/form/form-context'
 
 import { Validation } from '@/presentation/protocols/validation'
-import { Authentication, SaveAccessToken } from '@/domain/usecases'
+import { Authentication, UpdateCurrentAccount } from '@/domain/usecases'
 import { Link, useHistory } from 'react-router-dom'
 import SubmitButton from '@/presentation/components/submit-button/submit-button'
 
 type Props = {
   validation: Validation
   authentication: Authentication
-  saveAccessToken: SaveAccessToken
+  updateCurrentAccount: UpdateCurrentAccount
 };
 
-const Login: React.FC<Props> = ({ validation, authentication, saveAccessToken }: Props) => {
+const Login: React.FC<Props> = ({ validation, authentication, updateCurrentAccount }: Props) => {
   const history = useHistory()
 
   const [state, setState] = useState({
@@ -65,7 +65,7 @@ const Login: React.FC<Props> = ({ validation, authentication, saveAccessToken }:
 
       const account = await authentication.auth({ email: state.email, password: state.password })
 
-      await saveAccessToken.save(account.accessToken)
+      await updateCurrentAccount.save(account)
 
       history.replace('/')
     } catch (err) {

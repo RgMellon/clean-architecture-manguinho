@@ -13,16 +13,16 @@ import Context from '@/presentation/contexts/form/form-context'
 
 import { Link, useHistory } from 'react-router-dom'
 import { Validation } from '@/presentation/protocols/validation'
-import { AddAccount, SaveAccessToken } from '@/domain/usecases'
+import { AddAccount, UpdateCurrentAccount } from '@/domain/usecases'
 import SubmitButton from '@/presentation/components/submit-button/submit-button'
 
 type Props = {
   validation: Validation
   addAccount: AddAccount
-  saveAccessToken: SaveAccessToken
+  updateCurrentAccount: UpdateCurrentAccount
 };
 
-const SignUp: React.FC<Props> = ({ validation, addAccount, saveAccessToken }) => {
+const SignUp: React.FC<Props> = ({ validation, addAccount, updateCurrentAccount }) => {
   const history = useHistory()
 
   const [state, setState] = useState({
@@ -76,7 +76,7 @@ const SignUp: React.FC<Props> = ({ validation, addAccount, saveAccessToken }) =>
         passwordConfirmation: state.passwordConfirmation
       })
 
-      await saveAccessToken.save(account.accessToken)
+      await updateCurrentAccount.save(account)
       history.replace('/')
     } catch (err) {
       setState({

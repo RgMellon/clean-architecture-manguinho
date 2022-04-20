@@ -4,14 +4,14 @@ import { makeRemoteAuthentication } from '@/main/factories/usecases/authenticati
 import { Login } from '@/presentation/pages'
 
 import { makeLoginValidation } from './login-validation-factory'
-import { makeLocalSaveAccestoken } from '../../usecases/save-access-token/local-save-access-token-factory'
+import { makeLocalUpdateCurrentAccount } from '../../usecases/update-current-account/local-update-current-account-factory'
 
 export const makeLogin: React.FC = () => {
   return (
     <Login
       authentication={makeRemoteAuthentication()}
       validation={makeLoginValidation()}
-      saveAccessToken={makeLocalSaveAccestoken()}
+      updateCurrentAccount={makeLocalUpdateCurrentAccount()}
     />
   )
 }
