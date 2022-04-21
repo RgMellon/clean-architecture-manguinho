@@ -4,7 +4,8 @@ import { UpdateCurrentAccount } from '@/domain/usecases/update-current-account'
 
 export class LocalUpdateCurrentAccount implements UpdateCurrentAccount {
   constructor (private readonly setStorageSpy: SetStorage) {}
+  // eslint-disable-next-line @typescript-eslint/require-await
   async save (account: AccountModel): Promise<void> {
-    await this.setStorageSpy.set('account', JSON.stringify(account))
+    this.setStorageSpy.set('account', JSON.stringify(account))
   }
 }
