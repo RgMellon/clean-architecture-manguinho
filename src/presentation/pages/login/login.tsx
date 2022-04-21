@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 
 import Styles from './login-styles.scss'
 
@@ -9,20 +9,21 @@ import {
   Input
 } from '@/presentation/components'
 
-import Context from '@/presentation/contexts/form/form-context'
+import { FormContext, ApiContext } from '@/presentation/contexts'
 
 import { Validation } from '@/presentation/protocols/validation'
-import { Authentication, UpdateCurrentAccount } from '@/domain/usecases'
+import { Authentication } from '@/domain/usecases'
 import { Link, useHistory } from 'react-router-dom'
 import SubmitButton from '@/presentation/components/submit-button/submit-button'
 
 type Props = {
   validation: Validation
   authentication: Authentication
-  updateCurrentAccount: UpdateCurrentAccount
 };
 
-const Login: React.FC<Props> = ({ validation, authentication, updateCurrentAccount }: Props) => {
+const Login: React.FC<Props> = ({ validation, authentication }: Props) => {
+  const { setCurrentAccount } = useContext(ApiContext)
+
   const history = useHistory()
 
   const [state, setState] = useState({
@@ -64,8 +65,7 @@ const Login: React.FC<Props> = ({ validation, authentication, updateCurrentAccou
       })
 
       const account = await authentication.auth({ email: state.email, password: state.password })
-
-      await updateCurrentAccount.save(account)
+      setCurrentAccount(account)
 
       history.replace('/')
     } catch (err) {
@@ -81,7 +81,7 @@ const Login: React.FC<Props> = ({ validation, authentication, updateCurrentAccou
     <div className={Styles.login}>
       <LoginHeader />
 
-      <Context.Provider value={{ state, setState }}>
+      <FormContext.Provider value={{ state, setState }}>
         <form
           data-testid="form"
           className={Styles.form}
@@ -105,7 +105,7 @@ const Login: React.FC<Props> = ({ validation, authentication, updateCurrentAccou
 
           <FormStatus />
         </form>
-      </Context.Provider>
+      </FormContext.Provider>
       <Footer />
     </div>
   )

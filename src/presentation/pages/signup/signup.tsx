@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 
 import Styles from './signup-styles.scss'
 
@@ -13,16 +13,18 @@ import Context from '@/presentation/contexts/form/form-context'
 
 import { Link, useHistory } from 'react-router-dom'
 import { Validation } from '@/presentation/protocols/validation'
-import { AddAccount, UpdateCurrentAccount } from '@/domain/usecases'
+import { AddAccount } from '@/domain/usecases'
 import SubmitButton from '@/presentation/components/submit-button/submit-button'
+import { ApiContext } from '@/presentation/contexts'
 
 type Props = {
   validation: Validation
   addAccount: AddAccount
-  updateCurrentAccount: UpdateCurrentAccount
+
 };
 
-const SignUp: React.FC<Props> = ({ validation, addAccount, updateCurrentAccount }) => {
+const SignUp: React.FC<Props> = ({ validation, addAccount }) => {
+  const { setCurrentAccount } = useContext(ApiContext)
   const history = useHistory()
 
   const [state, setState] = useState({
@@ -76,7 +78,7 @@ const SignUp: React.FC<Props> = ({ validation, addAccount, updateCurrentAccount 
         passwordConfirmation: state.passwordConfirmation
       })
 
-      await updateCurrentAccount.save(account)
+      setCurrentAccount(account)
       history.replace('/')
     } catch (err) {
       setState({

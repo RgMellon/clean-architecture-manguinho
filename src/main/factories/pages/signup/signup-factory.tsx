@@ -4,7 +4,7 @@ import { makeRemoteAuthentication } from '@/main/factories/usecases/authenticati
 import { SignUp } from '@/presentation/pages'
 
 import { makeSignUpValidator } from './signup-validation-factory'
-import { makeLocalUpdateCurrentAccount } from '../../usecases/update-current-account/local-update-current-account-factory'
+
 import { makeRemoteAddAccount } from '../../usecases/add-account/remote-add-account'
 
 export const makeSignUp: React.FC = () => {
@@ -12,7 +12,6 @@ export const makeSignUp: React.FC = () => {
     <SignUp
       addAccount={makeRemoteAddAccount()}
       validation={makeSignUpValidator()}
-      updateCurrentAccount={makeLocalUpdateCurrentAccount()}
     />
   )
 }
