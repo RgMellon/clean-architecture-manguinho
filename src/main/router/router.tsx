@@ -1,3 +1,4 @@
+import PrivateRoute from '@/presentation/components/private-route/private-route'
 import { ApiContext } from '@/presentation/contexts'
 import SurveyList from '@/presentation/pages/survey-list/survey-list'
 import React from 'react'
@@ -15,7 +16,7 @@ const Router: React.FC = () => {
         <Switch>
           <Route path="/login" exact component={makeLogin} />
           <Route path="/signup" exact component={makeSignUp} />
-          <Route path="/" exact component={SurveyList} />
+          <PrivateRoute path="/" exact component={SurveyList} />
         </Switch>
       </BrowserRouter>
     </ApiContext.Provider>
