@@ -3,14 +3,14 @@ import SurveyList from '@/presentation/pages/survey-list/survey-list'
 import React from 'react'
 
 import { BrowserRouter, Route, Switch } from 'react-router-dom'
-import { setCurrentAccountAdapter } from '../adapters/current-account-adapters'
+import { getCurrentAccountAdapter, setCurrentAccountAdapter } from '../adapters/current-account-adapters'
 
 import { makeLogin } from '../factories/pages/login/login-factory'
 import { makeSignUp } from '../factories/pages/signup/signup-factory'
 
 const Router: React.FC = () => {
   return (
-    <ApiContext.Provider value={{ setCurrentAccount: setCurrentAccountAdapter }}>
+    <ApiContext.Provider value={{ setCurrentAccount: setCurrentAccountAdapter, getCurrentAccount: getCurrentAccountAdapter }}>
       <BrowserRouter>
         <Switch>
           <Route path="/login" exact component={makeLogin} />
