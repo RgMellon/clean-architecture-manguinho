@@ -79,24 +79,14 @@ const populatePasswordField = (
   })
 }
 
-const testIfElementExists = (fieldName: string): void => {
-  const el = screen.getByTestId(fieldName)
-  expect(el).toBeTruthy()
-}
-
-const testElementText = (fieldName: string, text: string): void => {
-  const el = screen.getByTestId(fieldName)
-  expect(el.textContent).toBe(text)
-}
-
 describe('Login Component', () => {
   test('Should start with initial state', () => {
     const validationError = faker.random.words()
     makeSut({ validationError })
 
-    Helper.testChildCount('error-wrap', 0)
+    expect(screen.getByTestId('error-wrap').children).toHaveLength(0)
 
-    Helper.testButtonIsDisabled('submit', true)
+    expect(screen.getByTestId('submit')).toBeDisabled()
 
     Helper.testStatusForField('email', validationError)
     Helper.testStatusForField('password', validationError)
@@ -140,14 +130,14 @@ describe('Login Component', () => {
     Helper.populateField('email')
     populatePasswordField()
 
-    Helper.testButtonIsDisabled('submit', false)
+    expect(screen.getByTestId('submit')).toBeEnabled()
   })
 
   test('Should show spinner on submit', async () => {
     makeSut()
     await simulateValidatedSubmit()
 
-    testIfElementExists('spinner')
+    expect(screen.queryByTestId('spinner')).toBeInTheDocument()
   })
 
   test('Should call Authentication with correct values', async () => {
@@ -187,9 +177,10 @@ describe('Login Component', () => {
     jest.spyOn(authenticationSpy, 'auth').mockReturnValueOnce(Promise.reject(error))
 
     await simulateValidatedSubmit()
-    Helper.testChildCount('error-wrap', 1)
 
-    testElementText('main-error', error.message)
+    expect(screen.getByTestId('error-wrap').children).toHaveLength(1)
+
+    expect(screen.getByTestId('main-error')).toHaveTextContent(error.message)
   })
 
   test('Should call SaveAccessToken on success', async () => {
