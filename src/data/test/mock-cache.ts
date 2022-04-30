@@ -14,7 +14,7 @@ export class SetStorageSpy implements SetStorage {
 
 export class GestStorageSpy implements GetStorage {
   key: string;
-  value = faker.random.objectElement()
+  value: any = faker.random.objectElement()
 
   get (key: string): any {
     this.key = key
