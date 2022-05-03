@@ -2,17 +2,18 @@ import { HttpStatusCode } from '@/data/protocols/http'
 import { HttpGetClientSpy } from '@/data/test'
 import { UnexpectedError } from '@/domain/errors'
 import { SurveyModel } from '@/domain/models'
+import { mockRemoteSurveyListModel } from '@/domain/tests/mock-remote-survey-list'
 import { mockSurveyListModel } from '@/domain/tests/mock-survey-list'
 import faker from 'faker'
-import { RemoteLoadSurveyList } from './remote-survey-list'
+import { RemoteLoadSurveyList, RemoteLoadSurveyListModel } from './remote-survey-list'
 
 type SutTypes = {
   sut: RemoteLoadSurveyList
-  httpGetClientSpy: HttpGetClientSpy<SurveyModel[]>
+  httpGetClientSpy: HttpGetClientSpy<RemoteLoadSurveyListModel[]>
 }
 
 const makeSut = (url = faker.internet.url()): SutTypes => {
-  const httpGetClientSpy = new HttpGetClientSpy<SurveyModel[]>()
+  const httpGetClientSpy = new HttpGetClientSpy<RemoteLoadSurveyListModel[]>()
   const sut = new RemoteLoadSurveyList(url, httpGetClientSpy)
 
   return {
@@ -62,7 +63,7 @@ describe('RemoteLoadSurveyList', () => {
   it('should return a list of SurveyModels if HttpGetClient returns 200', async () => {
     const { httpGetClientSpy, sut } = makeSut()
 
-    const httpResult = mockSurveyListModel()
+    const httpResult = mockRemoteSurveyListModel()
 
     httpGetClientSpy.response = {
       statusCode: HttpStatusCode.ok,
@@ -70,7 +71,26 @@ describe('RemoteLoadSurveyList', () => {
     }
 
     const surveyList = await sut.loadAll()
-    expect(surveyList).toEqual(httpResult)
+
+    expect(surveyList).toEqual([{
+      id: httpResult[0].id,
+      question: httpResult[0].question,
+      didAnswer: httpResult[0].didAnswer,
+      date: new Date(httpResult[0].date),
+      answers: httpResult[0].answers
+    }, {
+      id: httpResult[1].id,
+      question: httpResult[1].question,
+      didAnswer: httpResult[1].didAnswer,
+      date: new Date(httpResult[1].date),
+      answers: httpResult[1].answers
+    }, {
+      id: httpResult[2].id,
+      question: httpResult[2].question,
+      didAnswer: httpResult[2].didAnswer,
+      date: new Date(httpResult[2].date),
+      answers: httpResult[2].answers
+    }])
   })
 
   it('should return an empty list if HttpGetClient returns 204', async () => {
