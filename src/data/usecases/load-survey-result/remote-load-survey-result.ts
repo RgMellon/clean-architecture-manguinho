@@ -25,6 +25,7 @@ export namespace RemoteLoadSurveyResult {
     question: string
     date: string
     answers: Array<{
+      isCurrentAccountAnswer: boolean
       image?: string
       answer: string
       count: number
