@@ -16,6 +16,16 @@
     flex-grow: 1;
     padding: 40px;
 
+    hgroup {
+      display: flex;
+      align-items: center;
+    }
+
+    .calendarWrap {
+      margin-right: 16px;
+      margin-left: 0px;
+    }
+
     h2 {
       color: $primaryDark;
       font-size: 20px;
