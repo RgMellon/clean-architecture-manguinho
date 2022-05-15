@@ -28,7 +28,7 @@ const SurveyList: React.FC<Props> = ({ loadSurveyList }: Props) => {
     async function load () {
       try {
         const surveysList = await loadSurveyList.loadAll()
-        setState({ ...state, surveys: surveysList })
+        setState(oldState => ({ ...oldState, surveys: surveysList }))
       } catch (error) {
         handleError(error)
       }
