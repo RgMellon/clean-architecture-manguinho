@@ -3,7 +3,7 @@ import FlipMove from 'react-flip-move'
 import React from 'react'
 
 import Styles from './survey-result-styles.scss'
-import Spinner from '@/presentation/components/spinner/spinner'
+import Loading from '@/presentation/components/loading'
 
 export const SurveyResult: React.FC = () => {
   return (
@@ -40,14 +40,7 @@ export const SurveyResult: React.FC = () => {
 
         <button> Voltar </button>
 
-        <div className={Styles.loadingWrap}>
-          <div className={Styles.loading}>
-            <span>
-              Aguarde...
-            </span>
-            <Spinner />
-          </div>
-        </div>
+        <Loading />
       </div>
       <Footer />
     </div>
