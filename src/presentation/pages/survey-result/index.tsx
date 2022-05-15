@@ -40,7 +40,7 @@ export const SurveyResult: React.FC = () => {
 
         <button> Voltar </button>
 
-        <Loading />
+        {/* <Loading /> */}
       </div>
       <Footer />
     </div>
