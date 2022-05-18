@@ -11,38 +11,22 @@ export const SurveyResult: React.FC = () => {
     <div className={Styles.surveyResultWrapper}>
       <Header />
       <div className={Styles.contentWrap}>
-        <hgroup>
-          <Calendar date={new Date()} className={Styles.calendarWrap} />
-          <h2>Qual é seu nome?</h2>
-        </hgroup>
+        {false && <>
+          <hgroup>
+            <Calendar date={new Date()} className={Styles.calendarWrap} />
+            <h2>Qual é seu nome?</h2>
+          </hgroup>
+          <FlipMove className={Styles.answersList}>
+            <li>
+              <img src="https://www.tshirtgeek.com.br/wp-content/uploads/2021/03/com015.jpg" alt="" />
+              <span className={Styles.answer}>React Js</span>
+              <span className={Styles.percent}>50%</span>
+            </li>
+          </FlipMove>
 
-        <FlipMove className={Styles.answersList}>
-          <li>
-            <img src="https://www.tshirtgeek.com.br/wp-content/uploads/2021/03/com015.jpg" alt="" />
-            <span className={Styles.answer}>React Js</span>
-            <span className={Styles.percent}>50%</span>
-          </li>
-
-          <li>
-            <img src="https://www.tshirtgeek.com.br/wp-content/uploads/2021/03/com015.jpg" alt="" />
-            <span className={Styles.answer}>React Js</span>
-            <span className={Styles.percent}>50%</span>
-          </li>
-
-          <li>
-            <img src="https://www.tshirtgeek.com.br/wp-content/uploads/2021/03/com015.jpg" alt="" />
-            <span className={Styles.answer}>React Js</span>
-            <span className={Styles.percent}>50%</span>
-          </li>
-
-          <li>
-            <img src="https://www.tshirtgeek.com.br/wp-content/uploads/2021/03/com015.jpg" alt="" />
-            <span className={Styles.answer}>React Js</span>
-            <span className={Styles.percent}>50%</span>
-          </li>
-        </FlipMove>
-
-        <button> Voltar </button>
+          <button> Voltar </button>
+        </>
+        }
 
         {/* <Loading /> */}
       </div>
