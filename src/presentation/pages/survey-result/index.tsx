@@ -1,20 +1,28 @@
 import { Footer, Header } from '@/presentation/components'
 import FlipMove from 'react-flip-move'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import Styles from './survey-result-styles.scss'
 import Loading from '@/presentation/components/loading'
 import Calendar from '@/presentation/components/calendar'
 
-import { SurveyModel } from '@/domain/models/survey-model'
+import { LoadSurveyResult } from '@/domain/usecases'
 import Error from '@/presentation/components/error'
 
-export const SurveyResult: React.FC = () => {
+type Props = {
+  loadSurveyResult: LoadSurveyResult
+}
+
+export const SurveyResult: React.FC<Props> = ({ loadSurveyResult }: Props) => {
   const [state] = useState({
     isLoading: false,
     error: '',
-    surveyResult: null as SurveyModel
+    surveyResult: null as LoadSurveyResult.Model
   })
+
+  useEffect(() => {
+    loadSurveyResult.load()
+  }, [])
 
   const reload = () => {
     alert('é top')
