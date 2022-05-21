@@ -14,14 +14,19 @@ type Props = {
 }
 
 export const SurveyResult: React.FC<Props> = ({ loadSurveyResult }: Props) => {
-  const [state] = useState({
+  const [state, setState] = useState({
     isLoading: false,
     error: '',
     surveyResult: null as LoadSurveyResult.Model
   })
 
   useEffect(() => {
-    loadSurveyResult.load()
+    loadSurveyResult.load().then(surveyResult => {
+      setState(old => ({
+        ...old,
+        surveyResult: surveyResult
+      }))
+    })
   }, [])
 
   const reload = () => {
@@ -34,15 +39,16 @@ export const SurveyResult: React.FC<Props> = ({ loadSurveyResult }: Props) => {
       <div data-testid="survey-result" className={Styles.contentWrap}>
         {state.surveyResult && <>
           <hgroup>
-            <Calendar date={new Date()} className={Styles.calendarWrap} />
-            <h2>Qual é seu nome?</h2>
+            <Calendar date={state.surveyResult.date} className={Styles.calendarWrap} />
+            <h2 data-testid="question">{state.surveyResult.question}</h2>
           </hgroup>
-          <FlipMove className={Styles.answersList}>
-            <li>
-              <img src="https://www.tshirtgeek.com.br/wp-content/uploads/2021/03/com015.jpg" alt="" />
-              <span className={Styles.answer}>React Js</span>
-              <span className={Styles.percent}>50%</span>
+          <FlipMove data-testid="answers" className={Styles.answersList}>
+            {state.surveyResult.answers.map(answer => <li key={answer.answer} data-testid="answer-wrap" className={answer.isCurrentAccountAnswer ? Styles.active : ''}>
+              {!!answer.image && <img data-testid="image" src={answer.image} alt={answer.answer} />}
+              <span data-testid="answer" className={Styles.answer}>{answer.answer}</span>
+              <span data-testid="percent" className={Styles.percent}>{answer.percent}%</span>
             </li>
+            )}
           </FlipMove>
 
           <button> Voltar </button>
