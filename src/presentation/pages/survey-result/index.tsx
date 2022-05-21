@@ -1,17 +1,30 @@
 import { Footer, Header } from '@/presentation/components'
 import FlipMove from 'react-flip-move'
-import React from 'react'
+import React, { useState } from 'react'
 
 import Styles from './survey-result-styles.scss'
 import Loading from '@/presentation/components/loading'
 import Calendar from '@/presentation/components/calendar'
 
+import { SurveyModel } from '@/domain/models/survey-model'
+import Error from '@/presentation/components/error'
+
 export const SurveyResult: React.FC = () => {
+  const [state] = useState({
+    isLoading: false,
+    error: '',
+    surveyResult: null as SurveyModel
+  })
+
+  const reload = () => {
+    alert('é top')
+  }
+
   return (
     <div className={Styles.surveyResultWrapper}>
       <Header />
-      <div className={Styles.contentWrap}>
-        {false && <>
+      <div data-testid="survey-result" className={Styles.contentWrap}>
+        {state.surveyResult && <>
           <hgroup>
             <Calendar date={new Date()} className={Styles.calendarWrap} />
             <h2>Qual é seu nome?</h2>
@@ -28,7 +41,8 @@ export const SurveyResult: React.FC = () => {
         </>
         }
 
-        {/* <Loading /> */}
+        {state.isLoading && <Loading /> }
+        {state.error && <Error error={state.error} reload={reload} />}
       </div>
       <Footer />
     </div>
