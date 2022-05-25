@@ -18,7 +18,8 @@ export const SurveyResult: React.FC<Props> = ({ loadSurveyResult }: Props) => {
   const [state, setState] = useState({
     isLoading: false,
     error: '',
-    surveyResult: null as LoadSurveyResult.Model
+    surveyResult: null as LoadSurveyResult.Model,
+    reload: false
   })
 
   const handleError = useErrorHandler((error: Error) => {
@@ -32,10 +33,15 @@ export const SurveyResult: React.FC<Props> = ({ loadSurveyResult }: Props) => {
         surveyResult: surveyResult
       }))
     }).catch(handleError)
-  }, [])
+  }, [state.reload])
 
-  const reload = () => {
-    alert('é top')
+  const reload = (): void => {
+    setState(old => ({
+      surveyResult: null,
+      isLoading: false,
+      error: '',
+      reload: !old.reload
+    }))
   }
 
   return (
