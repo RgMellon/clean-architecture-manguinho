@@ -9,12 +9,14 @@ import Calendar from '@/presentation/components/calendar'
 import { LoadSurveyResult } from '@/domain/usecases'
 import Error from '@/presentation/components/error'
 import { useErrorHandler } from '@/presentation/hooks'
+import { useHistory } from 'react-router-dom'
 
 type Props = {
   loadSurveyResult: LoadSurveyResult
 }
 
 export const SurveyResult: React.FC<Props> = ({ loadSurveyResult }: Props) => {
+  const { goBack } = useHistory()
   const [state, setState] = useState({
     isLoading: false,
     error: '',
@@ -63,7 +65,7 @@ export const SurveyResult: React.FC<Props> = ({ loadSurveyResult }: Props) => {
               )}
             </FlipMove>
 
-            <button> Voltar </button>
+            <button data-testid="back-button" onClick={goBack}> Voltar </button>
           </>
           }
 
