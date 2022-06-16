@@ -1,38 +1,38 @@
 import { HttpStatusCode } from '@/data/protocols/http'
-import { HttpGetClientSpy } from '@/data/test'
+import { HttpClientSpy } from '@/data/test'
 import { UnexpectedError, AccessDeniedError } from '@/domain/errors'
-import { SurveyModel } from '@/domain/models'
 import { mockRemoteSurveyListModel } from '@/domain/tests/mock-remote-survey-list'
-import { mockSurveyListModel } from '@/domain/tests/mock-survey-list'
+
 import faker from 'faker'
 import { RemoteLoadSurveyList, RemoteLoadSurveyListModel } from './remote-survey-list'
 
 type SutTypes = {
   sut: RemoteLoadSurveyList
-  httpGetClientSpy: HttpGetClientSpy<RemoteLoadSurveyListModel[]>
+  httpClientSpy: HttpClientSpy<RemoteLoadSurveyListModel[]>
 }
 
 const makeSut = (url = faker.internet.url()): SutTypes => {
-  const httpGetClientSpy = new HttpGetClientSpy<RemoteLoadSurveyListModel[]>()
-  const sut = new RemoteLoadSurveyList(url, httpGetClientSpy)
+  const httpClientSpy = new HttpClientSpy<RemoteLoadSurveyListModel[]>()
+  const sut = new RemoteLoadSurveyList(url, httpClientSpy)
 
   return {
     sut,
-    httpGetClientSpy
+    httpClientSpy
   }
 }
 
 describe('RemoteLoadSurveyList', () => {
-  it('Should call HttpGetClient with correct URL', async () => {
+  it('Should call HttpClient with correct URL and methood', async () => {
     const url = faker.internet.url()
-    const { httpGetClientSpy, sut } = makeSut(url)
+    const { httpClientSpy, sut } = makeSut(url)
     await sut.loadAll()
-    expect(httpGetClientSpy.url).toBe(url)
+    expect(httpClientSpy.url).toBe(url)
+    expect(httpClientSpy.method).toBe('get')
   })
 
-  it('should throw AccessDeniedError error if HttpGetClient returns 403', async () => {
-    const { httpGetClientSpy, sut } = makeSut()
-    httpGetClientSpy.response = {
+  it('should throw AccessDeniedError error if HttpClient returns 403', async () => {
+    const { httpClientSpy, sut } = makeSut()
+    httpClientSpy.response = {
       statusCode: HttpStatusCode.forbiden
     }
 
@@ -40,9 +40,9 @@ describe('RemoteLoadSurveyList', () => {
     await expect(promise).rejects.toThrow(new AccessDeniedError())
   })
 
-  it('should throw Unexpected error if HttpGetClient returns 404', async () => {
-    const { httpGetClientSpy, sut } = makeSut()
-    httpGetClientSpy.response = {
+  it('should throw Unexpected error if HttpClient returns 404', async () => {
+    const { httpClientSpy, sut } = makeSut()
+    httpClientSpy.response = {
       statusCode: HttpStatusCode.notFound
     }
 
@@ -50,9 +50,9 @@ describe('RemoteLoadSurveyList', () => {
     await expect(promise).rejects.toThrow(new UnexpectedError())
   })
 
-  it('should throw Unexpected error if HttpGetClient returns 500', async () => {
-    const { httpGetClientSpy, sut } = makeSut()
-    httpGetClientSpy.response = {
+  it('should throw Unexpected error if HttpClient returns 500', async () => {
+    const { httpClientSpy, sut } = makeSut()
+    httpClientSpy.response = {
       statusCode: HttpStatusCode.serverError
     }
 
@@ -60,12 +60,12 @@ describe('RemoteLoadSurveyList', () => {
     await expect(promise).rejects.toThrow(new UnexpectedError())
   })
 
-  it('should return a list of SurveyModels if HttpGetClient returns 200', async () => {
-    const { httpGetClientSpy, sut } = makeSut()
+  it('should return a list of SurveyModels if HttpClient returns 200', async () => {
+    const { httpClientSpy, sut } = makeSut()
 
     const httpResult = mockRemoteSurveyListModel()
 
-    httpGetClientSpy.response = {
+    httpClientSpy.response = {
       statusCode: HttpStatusCode.ok,
       body: httpResult
     }
@@ -93,10 +93,10 @@ describe('RemoteLoadSurveyList', () => {
     }])
   })
 
-  it('should return an empty list if HttpGetClient returns 204', async () => {
-    const { httpGetClientSpy, sut } = makeSut()
+  it('should return an empty list if HttpClient returns 204', async () => {
+    const { httpClientSpy, sut } = makeSut()
 
-    httpGetClientSpy.response = {
+    httpClientSpy.response = {
       statusCode: HttpStatusCode.noContent
     }
 

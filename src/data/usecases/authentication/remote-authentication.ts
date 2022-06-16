@@ -1,6 +1,6 @@
 
 import {
-  HttpPostClient,
+  HttpClient,
   HttpStatusCode
 } from '@/data/protocols/http'
 
@@ -12,11 +12,11 @@ import { AccountModel } from '@/domain/models'
 export class RemoteAuthentication implements Authentication {
   constructor (
     private readonly url: string,
-    private readonly httpPostClient: HttpPostClient<AccountModel>
+    private readonly httpClient: HttpClient<AccountModel>
   ) {}
 
   async auth (params: AuthenticationParams): Promise<AccountModel> {
-    const httpResponse = await this.httpPostClient.post({ url: this.url, body: params })
+    const httpResponse = await this.httpClient.request({ url: this.url, body: params, method: 'post' })
 
     switch (httpResponse.statusCode) {
       case HttpStatusCode.ok: return httpResponse.body
