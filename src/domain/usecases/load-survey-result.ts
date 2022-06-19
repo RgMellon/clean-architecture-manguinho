@@ -5,9 +5,5 @@ export interface LoadSurveyResult {
 }
 
 export namespace LoadSurveyResult {
-  export type Model = {
-    question: string
-    date: Date
-    answers: SurveyResultModel
-  }
+  export type Model = SurveyResultModel
 }

@@ -4,6 +4,7 @@ import { HttpStatusCode } from '@/data/protocols/http'
 import { HttpClient } from '@/data/protocols/http/http-client'
 import { AccessDeniedError, UnexpectedError } from '@/domain/errors'
 import { LoadSurveyResult } from '@/domain/usecases'
+import { RemoteSurveyResultModel } from '@/data/models'
 
 export class RemoteLoadSurveyResult implements LoadSurveyResult {
   constructor (private readonly url: string, private readonly httpGetClient: HttpClient<RemoteLoadSurveyResult.Model>) {}
@@ -21,15 +22,5 @@ export class RemoteLoadSurveyResult implements LoadSurveyResult {
 }
 
 export namespace RemoteLoadSurveyResult {
-  export type Model = {
-    question: string
-    date: string
-    answers: Array<{
-      isCurrentAccountAnswer: boolean
-      image?: string
-      answer: string
-      count: number
-      percent: number
-    }>
-  }
+  export type Model = RemoteSurveyResultModel
 }
