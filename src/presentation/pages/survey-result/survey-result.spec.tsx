@@ -120,4 +120,13 @@ describe('Survey Result Component', () => {
     fireEvent.click(screen.getByTestId('back-button'))
     expect(history.location.pathname).toBe('/')
   })
+
+  test('Should goto SurveyList on back button click', async () => {
+    makeSut()
+    await waitFor(() => screen.getByTestId('survey-result'))
+    const answerWrap = screen.queryAllByTestId('answer-wrap')
+
+    fireEvent.click(answerWrap[0])
+    expect(screen.queryByTestId('load')).not.toBeInTheDocument()
+  })
 })
