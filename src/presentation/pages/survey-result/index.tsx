@@ -16,6 +16,10 @@ type Props = {
 }
 
 export const SurveyResult: React.FC<Props> = ({ loadSurveyResult, saveSurveyResult }: Props) => {
+  const handleError = useErrorHandler((error: Error) => {
+    setState(old => ({ ...old, surveyResult: null, isLoading: false, error: error.message }))
+  })
+
   const [state, setState] = useState({
     isLoading: false,
     error: '',
@@ -23,17 +27,10 @@ export const SurveyResult: React.FC<Props> = ({ loadSurveyResult, saveSurveyResu
     reload: false
   })
 
-  const handleError = useErrorHandler((error: Error) => {
-    setState({ ...state, surveyResult: null, error: error.message })
-  })
-
   useEffect(() => {
-    loadSurveyResult.load().then(surveyResult => {
-      setState(old => ({
-        ...old,
-        surveyResult: surveyResult
-      }))
-    }).catch(handleError)
+    loadSurveyResult.load()
+      .then(surveyResult => setState(old => ({ ...old, surveyResult })))
+      .catch(handleError)
   }, [state.reload])
 
   const reload = (): void => {
@@ -47,7 +44,7 @@ export const SurveyResult: React.FC<Props> = ({ loadSurveyResult, saveSurveyResu
 
   function onAnswer (answer: string) {
     setState(old => ({ ...old, isLoading: true }))
-    saveSurveyResult.save({ answer }).then().catch()
+    saveSurveyResult.save({ answer }).then().catch(handleError)
   }
 
   return (
@@ -56,10 +53,8 @@ export const SurveyResult: React.FC<Props> = ({ loadSurveyResult, saveSurveyResu
         <Header />
         <SurveyResultContext.Provider value={{ onAnswer }}>
           <div data-testid="survey-result" className={Styles.contentWrap}>
-            {state.surveyResult &&
-            <SurveyResultData surveyResult={state.surveyResult}/>
-            }
-            {state.isLoading && <Loading /> }
+            {state.surveyResult && <SurveyResultData surveyResult={state.surveyResult} /> }
+            {state.isLoading && <Loading />}
             {state.error && <Error error={state.error} reload={reload} />}
           </div>
         </SurveyResultContext.Provider>
