@@ -8,6 +8,7 @@ import React from 'react'
 import { Router } from 'react-router-dom'
 import { SurveyResult } from '.'
 import { createMemoryHistory, MemoryHistory } from 'history'
+import { act } from 'react-dom/test-utils'
 
 type SutTypes = {
   saveSurveyResultSpy: SaveSurveyResultSpy
@@ -50,9 +51,10 @@ describe('Survey Result Component', () => {
     await waitFor(() => surveyResult)
   })
 
-  test('Should present correct initial state', async () => {
+  test('Should call LoadSurveyResult', async () => {
     const { loadSurveyResultSpy } = makeSut()
     await waitFor(() => screen.getByTestId('survey-result'))
+
     expect(loadSurveyResultSpy.callsCount).toBe(1)
   })
 
@@ -90,7 +92,37 @@ describe('Survey Result Component', () => {
     expect(percents[1]).toHaveTextContent(`${surveyResult.answers[1].percent}%`)
   })
 
-  it('Should render error on UnexpectedError', async () => {
+  test('Should present SurveyResult data on success', async () => {
+    const loadSurveyResultSpy = new LoadSurveyResultSpy()
+    const surveyResult = {
+      ...mockSurveyResultModel(),
+      date: new Date('2020-01-10T00:00:00')
+    }
+    loadSurveyResultSpy.surveyResult = surveyResult
+    makeSut({ loadSurveyResult: loadSurveyResultSpy })
+    await waitFor(() => screen.getByTestId('survey-result'))
+
+    expect(screen.getByTestId('day')).toHaveTextContent('10')
+    expect(screen.getByTestId('month')).toHaveTextContent('jan')
+    expect(screen.getByTestId('year')).toHaveTextContent('2020')
+    expect(screen.getByTestId('question')).toHaveTextContent(surveyResult.question)
+    expect(screen.getByTestId('answers').childElementCount).toBe(2)
+    const answersWrap = screen.queryAllByTestId('answer-wrap')
+    expect(answersWrap[0]).toHaveClass('active')
+    expect(answersWrap[1]).not.toHaveClass('active')
+    const images = screen.queryAllByTestId('image')
+    expect(images[0]).toHaveAttribute('src', surveyResult.answers[0].image)
+    expect(images[0]).toHaveAttribute('alt', surveyResult.answers[0].answer)
+    expect(images[1]).toBeFalsy()
+    const answers = screen.queryAllByTestId('answer')
+    expect(answers[0]).toHaveTextContent(surveyResult.answers[0].answer)
+    expect(answers[1]).toHaveTextContent(surveyResult.answers[1].answer)
+    const percents = screen.queryAllByTestId('percent')
+    expect(percents[0]).toHaveTextContent(`${surveyResult.answers[0].percent}%`)
+    expect(percents[1]).toHaveTextContent(`${surveyResult.answers[1].percent}%`)
+  })
+
+  test('Should render error on UnexpectedError', async () => {
     const loadSurveyResultSpy = new LoadSurveyResultSpy()
     const error = new UnexpectedError()
     jest.spyOn(loadSurveyResultSpy, 'load').mockRejectedValueOnce(error)
@@ -98,58 +130,50 @@ describe('Survey Result Component', () => {
     await waitFor(() => screen.getByTestId('survey-result'))
 
     expect(screen.queryByTestId('question')).not.toBeInTheDocument()
-    expect(screen.queryByTestId('load')).not.toBeInTheDocument()
-    expect(screen.queryByTestId('error')).toHaveTextContent(error.message)
+    expect(screen.getByTestId('error')).toHaveTextContent(error.message)
+    expect(screen.queryByTestId('loading')).not.toBeInTheDocument()
   })
 
-  test('Should logout on AccessDenied', async () => {
+  test('Should logout on AccessDeniedError', async () => {
     const loadSurveyResultSpy = new LoadSurveyResultSpy()
     jest.spyOn(loadSurveyResultSpy, 'load').mockRejectedValueOnce(new AccessDeniedError())
     const { setCurrentAccountMock, history } = makeSut({ loadSurveyResult: loadSurveyResultSpy })
-
     await waitFor(() => screen.getByTestId('survey-result'))
+
     expect(setCurrentAccountMock).toHaveBeenCalledWith(undefined)
     expect(history.location.pathname).toBe('/login')
   })
 
-  test('Should call LoadResult on reload', async () => {
+  test('Should call LoadSurveyResult on reload', async () => {
     const loadSurveyResultSpy = new LoadSurveyResultSpy()
     jest.spyOn(loadSurveyResultSpy, 'load').mockRejectedValueOnce(new UnexpectedError())
     makeSut({ loadSurveyResult: loadSurveyResultSpy })
     await waitFor(() => screen.getByTestId('survey-result'))
+
     fireEvent.click(screen.getByTestId('reload'))
+
     expect(loadSurveyResultSpy.callsCount).toBe(1)
     await waitFor(() => screen.getByTestId('survey-result'))
   })
 
-  // test('Should goto SurveyList on back button click', async () => {
-  //   const { history } = makeSut()
-  //   await waitFor(() => screen.getByTestId('survey-result'))
-  //   fireEvent.click(screen.getByTestId('back-button'))
-  //   expect(history.location.pathname).toBe('/')
-  // })
-
   test('Should goto SurveyList on back button click', async () => {
-    makeSut()
+    const { history } = makeSut()
     await waitFor(() => screen.getByTestId('survey-result'))
-    const answerWrap = screen.queryAllByTestId('answer-wrap')
 
-    fireEvent.click(answerWrap[0])
-    expect(screen.queryByTestId('loading')).not.toBeInTheDocument()
+    fireEvent.click(screen.getByTestId('back-button'))
+
+    expect(history.location.pathname).toBe('/')
   })
 
-  test('Should call SaveSurveyResult on non active answer click', async () => {
-    const { saveSurveyResultSpy, loadSurveyResultSpy } = makeSut()
+  test('Should not present Loading on active answer click', async () => {
+    makeSut()
     await waitFor(() => screen.getByTestId('survey-result'))
-    const answersWrap = screen.queryAllByTestId('answer-wrap')
+    const answersWrap = await waitFor(() => screen.queryAllByTestId('answer-wrap'))
 
-    fireEvent.click(answersWrap[1])
-
-    expect(screen.queryByTestId('loading')).toBeInTheDocument()
-    expect(saveSurveyResultSpy.params).toEqual({
-      answer: loadSurveyResultSpy.surveyResult.answers[1].answer
-    })
     await waitFor(() => screen.getByTestId('survey-result'))
+    fireEvent.click(answersWrap[0])
+
+    expect(screen.queryByTestId('loading')).not.toBeInTheDocument()
   })
 
   test('Should render error on UnexpectedError', async () => {
@@ -170,14 +194,14 @@ describe('Survey Result Component', () => {
 
   test('Should logout on AccessDeniedError', async () => {
     const saveSurveyResultSpy = new SaveSurveyResultSpy()
-    const accessDeniedError = new AccessDeniedError()
-    jest.spyOn(saveSurveyResultSpy, 'save').mockRejectedValueOnce(accessDeniedError)
-    const { history, setCurrentAccountMock } = makeSut({ saveSurveyResultSpy })
+    jest.spyOn(saveSurveyResultSpy, 'save').mockRejectedValueOnce(new AccessDeniedError())
+    const { setCurrentAccountMock, history } = makeSut({ saveSurveyResultSpy })
     await waitFor(() => screen.getByTestId('survey-result'))
-
     const answersWrap = screen.queryAllByTestId('answer-wrap')
+
     fireEvent.click(answersWrap[1])
     await waitFor(() => screen.getByTestId('survey-result'))
+
     expect(setCurrentAccountMock).toHaveBeenCalledWith(undefined)
     expect(history.location.pathname).toBe('/login')
   })
