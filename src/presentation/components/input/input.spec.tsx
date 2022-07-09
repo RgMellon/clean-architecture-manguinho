@@ -1,14 +1,12 @@
 import React from 'react'
 import { fireEvent, render } from '@testing-library/react'
 
-import Input from './input'
 import Context from '@/presentation/contexts/form/form-context'
+import { InputBase } from '..'
 
 const makeSut = () => {
   return render(
-    <Context.Provider value={{ state: {} }}>
-      <Input name="field" />
-    </Context.Provider>
+    <InputBase name="field" state={{}} setState={null} />
   )
 }
 
